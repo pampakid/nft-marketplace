@@ -1,5 +1,7 @@
 /*  NFT smart contract that allows users to mint 
-    unique digital assets and have ownership of them. */
+    unique digital assets and have ownership of them. 
+    In this contract we are inheriting from the ERC721
+    standard implemented by OpenZeppelin*/
 
 // SPDX-License-Identifier: MIT OR Apache 2.0
 pragma solidity ^0.8.4;
