@@ -1,4 +1,6 @@
-// contracts /NFT.sol
+/*  NFT smart contract that allows users to mint 
+    unique digital assets and have ownership of them. */
+
 // SPDX-License-Identifier: MIT OR Apache 2.0
 pragma solidity ^0.8.4;
 
