@@ -4,13 +4,14 @@
 // SPDX-License-Identifier: MIT OR Apache 2.0
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+// Imports
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol"; // Non-reentrant helper
 
 import "hardhat/console.sol";
 
-/* Declare contracts */
+// Declare contracts
 contract NFTMarket is ReentrancyGuard {
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
@@ -34,7 +35,6 @@ contract NFTMarket is ReentrancyGuard {
         uint256 price;
         bool    sold;
     }
-    
     // Mapping for the MarketItem via idToMarketItem
     mapping(uint256 => MarketItem) private idToMarketItem;
 
@@ -46,50 +46,15 @@ contract NFTMarket is ReentrancyGuard {
         address seller,
         address owner,
         uint256 price,
-        bool    sold
+        bool sold
     );
 
-    // Returns the listing price of the contract 
+    //Function that returns the listing price
     function getListingPrice() public view returns (uint256) {
         return listingPrice;
     }
-
-    // Places an item for sale on the marketplace
-    function createMarketItem(
-        address nftContract,
-        uint256 tokenId,
-        uint256 price
-    ) public payable nonReentrant {
-        require(price > 0, "Price must be at least 1 wei");
-        require(msg.value == listingPrice, "Price must be equal to listing price");
-
-        _itemIds.increment()
-        uint256 itemId = _itemIds.current();
-        // Create mapping for the MarketItem
-        idToMarketItem[itemId] = MarketItem(
-            itemId,
-            nftContract,
-            tokenId,
-            payable(msg.sender),
-            payable(address(0)),
-            price,
-            false
-        );
-        // Transfer ownership of the NFT to the contract itself. Later the contract will transfer to the buyer
-        IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
-        // Emit the event that we created
-        emit MarketItemCreated(
-            itemId,
-            nftContract,
-            tokenId,
-            msg.sender,
-            address(0),
-            price,
-            false
-        );
-    }
-    
-    /* Places an item for sale on the marketplace */
+    // We need 2 functions to interact with the contract
+    // A) For creating a MarketItem and putting it on sale
     function createMarketItem(
         address nftContract,
         uint256 tokenId,
@@ -123,9 +88,7 @@ contract NFTMarket is ReentrancyGuard {
             false
         );
     }
-
-    /* Creates the sale of a marketplace item */
-    /* Transfers ownership of the item, as well as funds between parties */
+    // B) For creating a market sale for buying or selling an item between parties
     function createMarketSale(
         address nftContract,
         uint256 itemId // we don't need to pass the price cause it's already known in the contract
@@ -148,7 +111,7 @@ contract NFTMarket is ReentrancyGuard {
     }
 
     // Create functions for views of our NFTs
-    /* Returns all unsold market items */
+    // Unsold Items
     function fetchMarketItems() public view returns (MarketItem[] memory) {
         uint itemCount = _itemIds.current();
         uint unsoldItemCount = _itemIds.current() - _itemsSold.current();
@@ -166,8 +129,7 @@ contract NFTMarket is ReentrancyGuard {
         }
         return items; // return array from the loop
     }
-    
-    /* Returns only items that a user has purchased */
+    // Items that I've purchased
     function fetchMyNFTs() public view returns (MarketItem[] memory) {
         uint totalItemCount = _itemIds.current(); // similarly to how we kept the item count
         uint itemCount = 0;
@@ -192,8 +154,7 @@ contract NFTMarket is ReentrancyGuard {
         }
         return items;
     }
-
-    /* Returns only items a user has created */
+    // Items that I've created
     function fetchItemsCreated() public view returns (MarketItem[] memory) {
         uint totalItemCount = _itemIds.current();
         uint itemCount = 0;
@@ -217,3 +178,5 @@ contract NFTMarket is ReentrancyGuard {
         return items;
     }
 }
+
+

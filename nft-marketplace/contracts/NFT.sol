@@ -6,31 +6,33 @@
 // SPDX-License-Identifier: MIT OR Apache 2.0
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+// Imports 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol"; // easy-to-use utility to increment numbers
 
 import "hardhat/console.sol";
 
-// Define contract
+// Define our contract
 contract NFT is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds; // allow us to keep up with incremental values of unique identifiers for each token as we mint them
     address contractAddress; // address of the marketplace we want the nft to interact with (and viceversa)
 
-    constructor(address marketplaceAddress) ERC721("Metaverse Tokens", "METT") {
-        contractAddresss = marketplaceAddress;
+    // Write the constructor
+    constructor(address marketplaceAddress) ERC721("Metaverse", "METT") {
+        contractAddress = marketplaceAddress;
     }
-    // Mint new tokens
+    // Function to mint new tokens
     function createToken(string memory tokenURI) public returns (uint) {
-        _tokenIds.increment();
+        _tokenIds.increment(); // increment value starting at 0
         uint256 newItemId = _tokenIds.current();
 
+        // Mint token
         _mint(msg.sender, newItemId); // msg.sender as the creator
         _setTokenURI(newItemId, tokenURI);
-        setApprovalForAll(contractAddress, true); // give the marketplace the approval to transact
-
-        return newItemId; // return the new itemId for later user in the user-facing app
+        setApprovalForAll(contractAddress, true); // give the marketplace the approval to transact this token between users from within another contract
+        return newItemId; // return the itemId for later use in the user-facing app
     }
 }
 
