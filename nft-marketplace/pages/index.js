@@ -49,6 +49,27 @@ export default function Home() {
     setNfts(items)
     setLoadingState('loaded')
   }
+
+  /* Give user the ability to buy an NFT */
+  async function buyNFT(nft) {
+    const web3modal = new Web3Modal() // let user connect to their wallet
+    const connection = await web3modal.connect() 
+    const provider = new ethers.providers.Web3Provider(connection) // create provider using users' connection
+
+    const signer = provider.getSigner() // we need the user to sign and execute an actual transaction
+    const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer) // pass signer in the market reference
+
+    const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')
+    
+    /* Create market sale using our Market.sol function */
+    const transaction = await contract.createMarketSale(nftaddress, nft.tokenId, {
+      value: price
+    })
+    await transaction.wait() // wait until the transaction is finished
+
+    loadNFTs() // update NFTs
+  }
+
   if (loadingState === 'loaded' && !nfts.length) return (
     <h1 className="px-20 py-10 text-3xl">No items in marketplace</h1>
   )
