@@ -97,7 +97,7 @@ export default function CreateItem () {
         /* Return a form for the user to interact */
         <div className="w-1/2 flex flex-col pb-12">
             <input // Set name
-                placeholder="Asset Naeme"
+                placeholder="Asset Name"
                 className="mt-8 border rounded p-4"
                 onChange={ e => updateFormInput({ ...formInput, name: e.target.value })} // update local form input variable only changing the name
             />
