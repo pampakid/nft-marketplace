@@ -95,39 +95,41 @@ export default function CreateItem () {
     /* Return UI */
     return(
         /* Return a form for the user to interact */
-        <div className="w-1/2 flex flex-col pb-12">
-            <input // Set name
-                placeholder="Asset Name"
-                className="mt-8 border rounded p-4"
-                onChange={ e => updateFormInput({ ...formInput, name: e.target.value })} // update local form input variable only changing the name
-            />
-            <textarea // Set description
-                placeholder="Asset Description"
-                className="mt-2 border rounded p-4"
-                onChange={e => updateFormInput({ ...formInput, description: e.target.value })}
-            />
-            <input // Set price
-                placeholder="Asset Price (MATIC)"
-                className="mt-2 border rounded p-4"
-                onChange={e => updateFormInput({ ...formInput, price: e.target.value })}
-            />
-            <input // Show the file input
-                type="file"
-                name="Asset"
-                className="my-4"
-                onChange={onChange} // instead of passing a value, we call onChange directly
-            />
-            {   /* Show preview of file */
-                fileUrl && ( // if there is a file Url, show the image as preview
-                    <img className="rounded mt-4" width="350" src={fileUrl} />
-                )
-            } 
-            <button 
-                onClick={createItem}
-                className="font-bold mt-4 bg-pink-500 text-white rounded p-4 shadow-lg"
-            > 
-                Create Digital Asset
-            </button>
+        <div className="flex justify-center">
+            <div className="w-1/2 flex flex-col pb-12">
+                <input // Set name
+                    placeholder="Asset Name"
+                    className="mt-8 border rounded p-4"
+                    onChange={ e => updateFormInput({ ...formInput, name: e.target.value })} // update local form input variable only changing the name
+                />
+                <textarea // Set description
+                    placeholder="Asset Description"
+                    className="mt-2 border rounded p-4"
+                    onChange={e => updateFormInput({ ...formInput, description: e.target.value })}
+                />
+                <input // Set price
+                    placeholder="Asset Price (MATIC)"
+                    className="mt-2 border rounded p-4"
+                    onChange={e => updateFormInput({ ...formInput, price: e.target.value })}
+                />
+                <input // Show the file input
+                    type="file"
+                    name="Asset"
+                    className="my-4"
+                    onChange={onChange} // instead of passing a value, we call onChange directly
+                />
+                {   /* Show preview of file */
+                    fileUrl && ( // if there is a file Url, show the image as preview
+                        <img className="rounded mt-4" width="350" src={fileUrl} />
+                    )
+                } 
+                <button 
+                    onClick={createItem}
+                    className="font-bold mt-4 bg-pink-500 text-white rounded p-4 shadow-lg"
+                > 
+                    Create Digital Asset
+                </button>
+            </div>
         </div>
     )
 } 
