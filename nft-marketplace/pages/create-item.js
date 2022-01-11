@@ -17,7 +17,7 @@ import Market from '../artifacts/contracts/Market.sol/NFTMarket.json'
 import createStatsCollector from 'mocha/lib/stats-collector'
 
 // Define default export 
-export default function CreateItem () {
+export default function CreateItem() {
     const [fileUrl, setFileUrl] = useState(null) // ipfs file we are going to allow the user to upload
     const[formInput, updateFormInput] = useState({ price: '', name: '', description: '' }) // allow user to set the price, name and desc of the nft
     const router = useRouter() 
@@ -62,7 +62,7 @@ export default function CreateItem () {
         }
     } 
 
-    async function createSale() {
+    async function createSale(url) {
         const web3Modal = new Web3Modal()
         const connection = await web3Modal.connect() // connect
         const provider = new ethers.providers.Web3Provider(connection) // get provider
